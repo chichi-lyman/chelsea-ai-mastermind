@@ -1,19 +1,62 @@
-# Expo React Native Template
+# 🪐 Chelsea AI Mastermind
+### *Orchestrating the Autonomous Enterprise*
 
-This is a React Native template using Expo Router and configured for web, iOS, and Android development.
+![Chelsea AI Mastermind Dashboard](https://raw.githubusercontent.com/chichi-lyman/chelsea-ai-mastermind/main/path-to-your-image.jpg)
 
-## Quick Start
+**Chelsea AI Mastermind** is a high-fidelity, full-stack agentic platform built to bridge the gap between visionary design and autonomous execution. Utilizing a master-subagent architecture, the platform manages everything from self-healing codebases to automated revenue streams.
 
-```bash
-# Fast installation with Bun (recommended)
-bun install
+---
 
-# Or use npm (slower but more stable)
-npm install
+## ✨ Design Philosophy: "Darkly Divine"
+The interface is built on a **Glassmorphism** foundation, prioritizing:
+* **Visual Depth:** Layered `BlurView` components for a frosted, liquid-glass effect.
+* **Sophisticated Palettes:** High-contrast mesh gradients (Rose, Peach, and Deep Indigo).
+* **Intuitive Hierarchy:** A centralized "Command Center" for real-time agent orchestration.
 
-# Start development server
-npm run dev
-```
+## 🛠 Core Intelligence Layers
+
+### 🧠 Master Agent Engine
+A hierarchical control logic that eliminates friction in artificial network maps, allowing for seamless coordination between sub-agents.
+
+### ⚡ Self-Healing Protocol
+Automated bug detection and recursive repair loops. If the code breaks, the Mastermind fixes it before it impacts the deployment.
+
+### 📈 Automated Revenue Flows
+Full-stack integration with **Stripe** and **Wealth-Tracking** modules to monitor real-time MRR (Monthly Recurring Revenue) and pipeline conversions.
+
+### 🛡 System Guardrails
+Built-in safety and compliance filters that maintain the integrity of agentic creativity while ensuring production stability.
+
+---
+
+## 🚀 Technical Stack
+* **Frontend:** React Native (Expo) + TypeScript
+* **Styling:** NativeWind (Tailwind CSS) & Glassmorphism UI
+* **Backend:** Node.js + Agentic Orchestration Layer
+* **Infrastructure:** Blink.new Agentic Coding Platform
+
+---
+
+## 🏗 Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/chichi-lyman/chelsea-ai-mastermind.git
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   # Fast installation with Bun (recommended)
+   bun install
+   
+   # Or use npm (slower but more stable)
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
 The app will be available at `http://localhost:3000`
 
@@ -76,4 +119,21 @@ The app will be available at `http://localhost:3000`
 - Use `npm run setup` instead of `npm run install` for Expo packages
 - The project uses Expo Router for navigation
 - Web version runs on port 3000 by default
-- Bun is 2-10x faster than npm for package installation 
+- Bun is 2-10x faster than npm for package installation
+
+---
+
+## 📚 Additional Resources
+
+- [Expo Documentation](https://docs.expo.dev)
+- [React Native Documentation](https://reactnative.dev)
+- [TypeScript Documentation](https://www.typescriptlang.org)
+- [NativeWind Documentation](https://www.nativewind.dev)
+
+## 📝 License
+
+MIT License - see LICENSE file for details
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
