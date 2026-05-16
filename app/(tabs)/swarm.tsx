@@ -5,18 +5,17 @@ import {
   H1, 
   H4, 
   Paragraph, 
-  Card, 
   Avatar, 
   Progress, 
   Badge, 
   SafeArea, 
   ScrollView,
-  Tabs as TabUI,
   Circle,
   Activity
 } from '@blinkdotnew/mobile-ui';
 import { useQuery } from '@tanstack/react-query';
 import { blink } from '@/lib/blink';
+import { GlassCard } from '@/src/components/GlassCard';
 
 export default function SwarmScreen() {
   const { data: agents } = useQuery({
@@ -30,40 +29,37 @@ export default function SwarmScreen() {
   });
 
   return (
-    <SafeArea flex={1} backgroundColor="#0F172A">
-      <ScrollView padding="$4">
+    <SafeArea flex={1} backgroundColor="transparent">
+      <ScrollView padding="$4" contentContainerStyle={{ paddingBottom: 100 }}>
         <YStack gap="$6">
-          <YStack gap="$1">
-            <H4 color="$color11" fontWeight="400">Agentic Architecture</H4>
-            <H1 fontWeight="800" color="white">Sub-Agent Swarm</H1>
+          <YStack gap="$1" pt="$4">
+            <H4 color="rgba(255,255,255,0.5)" fontWeight="400" letterSpacing={1}>AGENTIC ARCHITECTURE</H4>
+            <H1 fontWeight="900" color="white" size="$10">Sub-Agent Swarm</H1>
           </YStack>
 
           {/* Active Agents Grid */}
           <YStack gap="$4">
-            <H4 color="$slate11">Specialized Units</H4>
+            <H4 color="rgba(255,255,255,0.5)" letterSpacing={1} size="$2">SPECIALIZED UNITS</H4>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <XStack gap="$4">
+              <XStack gap="$4" paddingVertical="$2">
                 {agents?.map((agent: any) => (
-                  <Card key={agent.id} width={200} bordered backgroundColor="#1E293B" padding="$4" gap="$3">
-                    <XStack justifyContent="space-between" alignItems="flex-start">
-                      <Avatar circular size="$5">
+                  <GlassCard key={agent.id} title={agent.status.toUpperCase()} accent={agent.status === 'active' ? '#10B981' : '#F59E0B'}>
+                    <YStack width={180} gap="$3">
+                      <Avatar circular size="$5" borderWidth={1} borderColor="rgba(255,255,255,0.1)">
                         <Avatar.Image src={agent.imageUrl} />
-                        <Avatar.Fallback backgroundColor="$slate8" />
+                        <Avatar.Fallback backgroundColor="rgba(255,255,255,0.1)" />
                       </Avatar>
-                      <Badge variant={agent.status === 'active' ? 'success' : 'warning'}>
-                        {agent.status}
-                      </Badge>
-                    </XStack>
-                    <YStack gap="$1">
-                      <H4 color="white">{agent.name}</H4>
-                      <Paragraph color="$slate11" size="$2" numberOfLines={2}>
-                        {agent.role}
+                      <YStack gap="$1">
+                        <H4 color="white" fontWeight="700">{agent.name}</H4>
+                        <Paragraph color="rgba(255,255,255,0.5)" size="$2" numberOfLines={2}>
+                          {agent.role}
+                        </Paragraph>
+                      </YStack>
+                      <Paragraph color="#A78BFA" size="$1" fontWeight="800" letterSpacing={1}>
+                        {agent.capabilities?.split(',')[0]}
                       </Paragraph>
                     </YStack>
-                    <Paragraph color="$purple10" size="$1" fontWeight="700">
-                      {agent.capabilities?.split(',')[0]}
-                    </Paragraph>
-                  </Card>
+                  </GlassCard>
                 ))}
               </XStack>
             </ScrollView>
@@ -72,34 +68,33 @@ export default function SwarmScreen() {
           {/* Live Task Feed */}
           <YStack gap="$4">
             <XStack justifyContent="space-between" alignItems="center">
-              <H4 color="$slate11">Operational Tasks</H4>
-              <Activity size={16} color="#8B5CF6" />
+              <H4 color="rgba(255,255,255,0.5)" letterSpacing={1} size="$2">OPERATIONAL TASKS</H4>
+              <Activity size={16} color="#A78BFA" />
             </XStack>
             
             {tasks?.map((task: any) => (
-              <Card key={task.id} bordered backgroundColor="#1E293B" padding="$4" gap="$3">
-                <XStack justifyContent="space-between">
-                  <YStack flex={1} gap="$1">
-                    <H4 color="white">{task.title}</H4>
-                    <Paragraph color="$slate11" size="$2">
-                      Agent: {agents?.find((a: any) => a.id === task.agentId)?.name || 'Unknown'}
-                    </Paragraph>
-                  </YStack>
-                  <Badge variant={task.status === 'completed' ? 'success' : 'info'}>
-                    {task.status}
-                  </Badge>
-                </XStack>
-                
-                <YStack gap="$2">
+              <GlassCard key={task.id} title={task.status.toUpperCase()} accent={task.status === 'completed' ? '#10B981' : '#A78BFA'}>
+                <YStack gap="$3">
                   <XStack justifyContent="space-between">
-                    <Paragraph color="$slate11" size="$2">Progress</Paragraph>
-                    <Paragraph color="white" size="$2" fontWeight="600">{task.progress}%</Paragraph>
+                    <YStack flex={1} gap="$1">
+                      <H4 color="white" fontWeight="700">{task.title}</H4>
+                      <Paragraph color="rgba(255,255,255,0.5)" size="$2">
+                        Agent: {agents?.find((a: any) => a.id === task.agentId)?.name || 'Unknown'}
+                      </Paragraph>
+                    </YStack>
                   </XStack>
-                  <Progress value={task.progress}>
-                    <Progress.Indicator backgroundColor="#8B5CF6" />
-                  </Progress>
+                  
+                  <YStack gap="$2">
+                    <XStack justifyContent="space-between">
+                      <Paragraph color="rgba(255,255,255,0.5)" size="$2">Progress</Paragraph>
+                      <Paragraph color="white" size="$2" fontWeight="700">{task.progress}%</Paragraph>
+                    </XStack>
+                    <Progress value={task.progress} height={6} backgroundColor="rgba(255,255,255,0.05)">
+                      <Progress.Indicator backgroundColor="#A78BFA" />
+                    </Progress>
+                  </YStack>
                 </YStack>
-              </Card>
+              </GlassCard>
             ))}
           </YStack>
         </YStack>
@@ -107,3 +102,4 @@ export default function SwarmScreen() {
     </SafeArea>
   );
 }
+

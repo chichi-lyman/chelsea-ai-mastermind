@@ -5,10 +5,8 @@ import {
   H1, 
   H4, 
   Paragraph, 
-  Card, 
   Button, 
   Switch, 
-  Label, 
   Circle, 
   useBlinkToast, 
   SafeArea,
@@ -16,14 +14,17 @@ import {
   Activity,
   Shield,
   Zap,
-  ScrollView
+  ScrollView,
+  Theme
 } from '@blinkdotnew/mobile-ui';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { blink } from '@/lib/blink';
 import * as Haptics from 'expo-haptics';
-import { Platform } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
 
 import { ChelseaEngine } from '@/components/ChelseaEngine';
+import { GlassCard } from '@/src/components/GlassCard';
+import { colors } from '@/constants/design';
 
 export default function DashboardScreen() {
   const toast = useBlinkToast();
@@ -81,65 +82,70 @@ export default function DashboardScreen() {
   const guardrailsOn = settings?.guardrailsEnabled === '1';
 
   return (
-    <SafeArea flex={1} backgroundColor="#0F172A">
-      <ScrollView padding="$4">
+    <SafeArea flex={1} backgroundColor="transparent">
+      <ScrollView padding="$4" contentContainerStyle={{ paddingBottom: 100 }}>
         <YStack gap="$6">
           {/* Header */}
-          <YStack gap="$1">
-            <H4 color="$color11" fontWeight="400">Master Interface</H4>
-            <H1 fontWeight="800" color="white">Chelsea AI</H1>
+          <YStack gap="$1" pt="$4">
+            <H4 color="rgba(255,255,255,0.5)" fontWeight="400" letterSpacing={1}>MASTER INTERFACE</H4>
+            <H1 fontWeight="900" color="white" size="$10">Chelsea AI</H1>
           </YStack>
 
           {/* Status Ring */}
           <YStack alignItems="center" py="$4">
             <YStack position="relative" alignItems="center" justifyContent="center">
               <Circle 
-                size={200} 
-                borderWidth={2} 
-                borderColor={isListening ? "$purple9" : "$slate8"}
-                opacity={0.3}
+                size={220} 
+                borderWidth={1} 
+                borderColor="rgba(255,255,255,0.1)"
+                backgroundColor="rgba(255,255,255,0.02)"
               />
               <Circle 
-                size={160} 
-                borderWidth={4} 
-                borderColor={isListening ? "$purple10" : "$slate9"}
+                size={180} 
+                borderWidth={2} 
+                borderColor={isListening ? "#A78BFA" : "rgba(255,255,255,0.15)"}
                 justifyContent="center"
                 alignItems="center"
+                style={{
+                  shadowColor: isListening ? "#A78BFA" : "transparent",
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 15,
+                }}
               >
                 <YStack alignItems="center" gap="$2">
-                  <Mic size={48} color={isListening ? "#A78BFA" : "#94A3B8"} />
-                  <Paragraph color={isListening ? "$purple10" : "$slate11"} fontWeight="600">
-                    {isListening ? "LISTENING..." : "IDLE"}
+                  <Mic size={48} color={isListening ? "#A78BFA" : "rgba(255,255,255,0.4)"} />
+                  <Paragraph color={isListening ? "#A78BFA" : "rgba(255,255,255,0.4)"} fontWeight="800" letterSpacing={2} size="$1">
+                    {isListening ? "LISTENING" : "READY"}
                   </Paragraph>
                 </YStack>
               </Circle>
               <Button 
                 position="absolute"
-                width={220}
-                height={220}
-                borderRadius={110}
+                width={240}
+                height={240}
+                borderRadius={120}
                 backgroundColor="transparent"
                 onPress={handleWakeWord}
               />
             </YStack>
-            <Paragraph mt="$4" color="$slate11" textAlign="center">
-              Say "Okay, Chelsea" or tap the ring
+            <Paragraph mt="$4" color="rgba(255,255,255,0.4)" textAlign="center" fontWeight="500">
+              "Okay, Chelsea"
             </Paragraph>
           </YStack>
 
           {/* Live Engine */}
-          <ChelseaEngine />
+          <GlassCard title="Engine Status" accent="#A78BFA">
+            <ChelseaEngine />
+          </GlassCard>
 
           {/* Compliance Toggle */}
-          <Card bordered backgroundColor="#1E293B" padding="$4">
+          <GlassCard title="Security Protocols" accent={guardrailsOn ? "#10B981" : "#EF4444"}>
             <XStack justifyContent="space-between" alignItems="center">
               <YStack gap="$1" flex={1}>
-                <XStack alignItems="center" gap="$2">
-                  <Shield size={18} color={guardrailsOn ? "#10B981" : "#EF4444"} />
-                  <H4 color="white">Guardrails Toggle</H4>
-                </XStack>
-                <Paragraph color="$slate11" size="$3">
-                  {guardrailsOn ? "Legal & Safety Compliance ON" : "Unrestricted Creativity OFF"}
+                <H4 color="white" fontWeight="700">Guardrails Mode</H4>
+                <Paragraph color="rgba(255,255,255,0.5)" size="$3">
+                  {guardrailsOn ? "Safe Mode Active" : "Unrestricted Access"}
                 </Paragraph>
               </YStack>
               <Switch 
@@ -148,29 +154,32 @@ export default function DashboardScreen() {
                 theme={guardrailsOn ? "green" : "red"}
               />
             </XStack>
-          </Card>
+          </GlassCard>
 
           {/* Quick Stats */}
           <XStack gap="$4">
-            <Card flex={1} bordered backgroundColor="#1E293B" padding="$4" gap="$2">
-              <Zap size={20} color="#F59E0B" />
-              <H4 color="white">Active Swarm</H4>
-              <Paragraph color="$slate11" size="$3">4 Agents Running</Paragraph>
-            </Card>
-            <Card flex={1} bordered backgroundColor="#1E293B" padding="$4" gap="$2">
-              <Activity size={20} color="#8B5CF6" />
-              <H4 color="white">System Health</H4>
-              <Paragraph color="$slate11" size="$3">Self-Healing 100%</Paragraph>
-            </Card>
+            <GlassCard title="Swarm" accent="#8B5CF6">
+              <YStack gap="$2" pt="$1">
+                <H1 color="white" size="$8">04</H1>
+                <Paragraph color="rgba(255,255,255,0.5)" size="$2">Sub-Agents Live</Paragraph>
+              </YStack>
+            </GlassCard>
+            <GlassCard title="Health" accent="#10B981">
+              <YStack gap="$2" pt="$1">
+                <H1 color="white" size="$8">100%</H1>
+                <Paragraph color="rgba(255,255,255,0.5)" size="$2">Self-Healing Active</Paragraph>
+              </YStack>
+            </GlassCard>
           </XStack>
 
           {/* System Footer */}
-          <YStack alignItems="center" mt="$4" opacity={0.5}>
-            <Paragraph color="$slate11" size="$2">CHELSEA OS v4.2.0-MASTER</Paragraph>
-            <Paragraph color="$slate11" size="$1">UNHACKABLE ENCRYPTION ACTIVE</Paragraph>
+          <YStack alignItems="center" mt="$4" opacity={0.3}>
+            <Paragraph color="white" size="$1" letterSpacing={1}>CHELSEA OS v4.5.0-GLASS</Paragraph>
+            <Paragraph color="white" size="$1" letterSpacing={1}>LIQUID INTERFACE DEPLOYED</Paragraph>
           </YStack>
         </YStack>
       </ScrollView>
     </SafeArea>
   );
 }
+
