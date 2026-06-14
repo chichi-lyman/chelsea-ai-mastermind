@@ -14,9 +14,9 @@ export const ChelseaEngine = () => {
   const [activeStep, setActiveStep] = useState(0);
   const steps = [
     { label: 'Analyzing Market Anomalies', icon: <TrendingUp size={16} color="#A78BFA" /> },
-    { label: 'Syncing Sub-Agent Swarm', icon: <Zap size={16} color="#8B5CF6" /> },
+    { label: 'Syncing Intelligence Engine', icon: <Cpu size={16} color="#3B82F6" /> },
     { label: 'Verifying Security Protocols', icon: <Shield size={16} color="#10B981" /> },
-    { label: 'Optimizing Neural Paths', icon: <Cpu size={16} color="#3B82F6" /> }
+    { label: 'Optimizing Self-Healing Paths', icon: <Zap size={16} color="#8B5CF6" /> }
   ];
 
   useEffect(() => {

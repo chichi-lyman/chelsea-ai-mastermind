@@ -20,11 +20,37 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { blink } from '@/lib/blink';
 import { GlassCard } from '@/src/components/GlassCard';
+import { triggerSelfHealing } from '@/src/services/MastermindEngine';
 
 export default function SecurityScreen() {
   const toast = useBlinkToast();
   const queryClient = useQueryClient();
   const [isRepairing, setIsRepairing] = useState(false);
+
+  const selfHealMutation = useMutation({
+    mutationFn: async () => {
+      setIsRepairing(true);
+      return await triggerSelfHealing('Manual trigger from Security Dashboard', 'Security Tab Context');
+    },
+    onSettled: (success) => {
+      setIsRepairing(false);
+      if (success) {
+        toast.show('System Integrity Restored', {
+          message: 'Chelsea autonomously patched all detected anomalies.',
+          variant: 'success'
+        });
+      } else {
+        toast.show('Healing Halted', {
+          message: 'Chelsea could not find any critical anomalies to patch.',
+          variant: 'info'
+        });
+      }
+    }
+  });
+
+  const handleManualRepair = () => {
+    selfHealMutation.mutate();
+  };
 
   const { data: logs } = useQuery({
     queryKey: ['system_logs'],
@@ -38,17 +64,6 @@ export default function SecurityScreen() {
       return list[0];
     }
   });
-
-  const handleManualRepair = () => {
-    setIsRepairing(true);
-    setTimeout(() => {
-      setIsRepairing(false);
-      toast.show('System Healed', {
-        message: 'All codebase anomalies resolved.',
-        variant: 'success'
-      });
-    }, 3000);
-  };
 
   const getLogColor = (status: string) => {
     switch (status) {

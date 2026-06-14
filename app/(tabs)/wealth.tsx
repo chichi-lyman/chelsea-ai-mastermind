@@ -20,12 +20,19 @@ import { blink } from '@/lib/blink';
 
 import { WealthChart } from '@/components/WealthChart';
 import { GlassCard } from '@/src/components/GlassCard';
+import { initiateWealthCheckout } from '@/src/services/WealthTracker';
 
 export default function WealthScreen() {
   const { data: opportunities } = useQuery({
     queryKey: ['wealth_opportunities'],
     queryFn: () => blink.db.wealthOpportunities.list()
   });
+
+  const handleAccelerate = async (oppId: string) => {
+    // In a real app, you'd map oppId to a real Stripe Price ID
+    const mockPriceId = 'price_H5ggY9U15sdp'; 
+    await initiateWealthCheckout(mockPriceId);
+  };
 
   return (
     <SafeArea flex={1} backgroundColor="transparent">
@@ -73,7 +80,13 @@ export default function WealthScreen() {
                     <H4 color="#10B981" fontWeight="900" size="$6">{opp.potentialRevenue}</H4>
                   </XStack>
                   <XStack gap="$2" mt="$1">
-                    <Button size="$2" theme="active" icon={<Zap size={14} />} borderRadius="$2">
+                    <Button 
+                      size="$2" 
+                      theme="active" 
+                      icon={<Zap size={14} />} 
+                      borderRadius="$2"
+                      onPress={() => handleAccelerate(opp.id)}
+                    >
                       Accelerate
                     </Button>
                     <Button size="$2" variant="outline" icon={<Briefcase size={14} />} borderRadius="$2">

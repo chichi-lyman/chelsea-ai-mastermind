@@ -25,11 +25,16 @@ import { Platform, View, StyleSheet } from 'react-native';
 import { ChelseaEngine } from '@/components/ChelseaEngine';
 import { GlassCard } from '@/src/components/GlassCard';
 import { colors } from '@/constants/design';
+import { initializeRAG } from '@/src/services/IntelligenceService';
 
 export default function DashboardScreen() {
   const toast = useBlinkToast();
   const queryClient = useQueryClient();
   const [isListening, setIsListening] = useState(false);
+
+  useEffect(() => {
+    initializeRAG();
+  }, []);
 
   const { data: settings, isLoading: loadingSettings } = useQuery({
     queryKey: ['settings'],
@@ -68,7 +73,8 @@ export default function DashboardScreen() {
   const handleWakeWord = () => {
     setIsListening(true);
     if (Platform.OS !== 'web') {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      setTimeout(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light), 100);
     }
     setTimeout(() => {
       setIsListening(false);
@@ -182,4 +188,3 @@ export default function DashboardScreen() {
     </SafeArea>
   );
 }
-

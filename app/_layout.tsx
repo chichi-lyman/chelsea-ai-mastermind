@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BlinkProvider, createTamagui, tamaguiDefaultConfig, Theme, BlinkToastProvider } from '@blinkdotnew/mobile-ui';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { LiquidBackground } from '@/src/components/LiquidBackground';
+import { startSwarmOrchestration, stopSwarmOrchestration } from '@/src/services/SwarmOrchestrator';
+import React, { useEffect } from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,9 +36,14 @@ function WebStyleReset() {
 export default function RootLayout() {
   useFrameworkReady();
 
+  useEffect(() => {
+    startSwarmOrchestration();
+    return () => stopSwarmOrchestration();
+  }, []);
+
   return (
-    <BlinkProvider config={config} defaultTheme="dark">
-      <Theme name="dark">
+    <BlinkProvider config={config} palette="rose" defaultTheme="light">
+      <Theme name="light">
         <QueryClientProvider client={queryClient}>
           <BlinkToastProvider>
             <View style={styles.container}>
@@ -64,4 +71,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F172A',
   },
 });
-

@@ -1,55 +1,40 @@
-import { PorcupineManager } from '@picovoice/porcupine-react-native';
+import { ChelseaHealer } from './SelfHealingService';
 
-export const startChelseaVoice = async (onWake: () => void) => {
-  const accessKey = 'YOUR_PICOVOICE_KEY'; // Replace with your Picovoice Key from console.picovoice.ai
-  try {
-    const manager = await PorcupineManager.fromBuiltInKeywords(
-      accessKey,
-      ['porcupine'], // Replace with custom 'Chelsea' .ppn model if trained
-      (idx) => {
-        if (idx === 0) {
-          console.log('Mastermind Listening: How can I help?');
-          onWake();
-        }
-      }
-    );
-    await manager.start();
-    console.log('Chelsea Voice Engine Activated');
-    return manager;
-  } catch (e) {
-    console.error('Voice Engine Error', e);
-    throw e;
-  }
+// Voice wake-word detection is handled via button press on web.
+// On native, swap this for a real wake-word SDK when a key is available.
+type WakeCallback = () => void;
+let wakeListener: WakeCallback | null = null;
+
+export const startChelseaVoice = (_onWake: WakeCallback) => {
+  wakeListener = _onWake;
+  console.log('Chelsea Voice Engine: Simulation mode active (press mic button to wake)');
+  // Return a no-op stop handle so callers don't need platform checks
+  return { stop: () => { wakeListener = null; } };
 };
 
-export const triggerSelfHealing = async (error: string, stack?: string) => {
-  console.log(
-    `Mastermind: Detecting corruption... Attempting auto-patch for: ${error}`
-  );
-  try {
-    const response = await fetch('/api/mastermind/heal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error, stack }),
-    });
+export const stopChelseaVoice = (handle?: { stop: () => void }) => {
+  handle?.stop();
+  wakeListener = null;
+  console.log('Chelsea Voice Engine Deactivated');
+};
 
-    if (response.ok) {
-      console.log('DevAgent: Patch Deployed. Restarting...');
+/** Call from the UI mic button to simulate a wake word trigger */
+export const simulateWakeWord = () => {
+  if (wakeListener) wakeListener();
+};
+
+export const triggerSelfHealing = async (error: string, stack?: string): Promise<boolean> => {
+  console.log(`Mastermind: Detecting corruption… auto-patching: ${error}`);
+  try {
+    const result = await ChelseaHealer(error, stack);
+    if (result.success) {
+      console.log('Mastermind: Self-healing successful. Integrity restored.');
       return true;
     }
+    console.error('Mastermind: Self-healing failed.', result.message);
     return false;
   } catch (e) {
-    console.error('Self-healing failed:', e);
+    console.error('Self-healing error:', e);
     return false;
-  }
-};
-
-export const stopChelseaVoice = async (manager: PorcupineManager) => {
-  try {
-    await manager.stop();
-    await manager.delete();
-    console.log('Chelsea Voice Engine Deactivated');
-  } catch (e) {
-    console.error('Error stopping voice engine:', e);
   }
 };
