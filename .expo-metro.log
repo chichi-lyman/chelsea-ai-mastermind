@@ -217,3 +217,6 @@ Unable to resolve "@stripe/stripe-react-native" from "src/services/WealthTracker
 
 [90m [39mapp[2m (require.context)[22m
 
+[0m[31merror[0m: Failed to run "[1mexpo[0m" due to signal [1mSIGKILL[0m
+
+Script done on 2026-06-14 06:09:13+00:00 [COMMAND_EXIT_CODE="137"]
